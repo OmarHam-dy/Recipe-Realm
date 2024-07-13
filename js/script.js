@@ -7,7 +7,7 @@ const navList = document.querySelector('nav ul');
 const navIcon = document.querySelector('nav .icon');
 const mainContainer = document.querySelector('main .row');
 
-let isOpen = false;
+let isListOpen = false;
 const baseUrl = 'https://forkify-api.herokuapp.com/api/search';
 
 let options = [
@@ -187,13 +187,20 @@ const displayRecipes = function (recipes) {
   });
 };
 
+const closeList = function () {
+  navList.classList.add('hide');
+  isListOpen = false;
+};
+const openList = function () {
+  navList.classList.remove('hide');
+  isListOpen = true;
+};
+
 ////////////////////////////////////////////////////////////////////////////
 // Event Listeners
 
 navIcon.addEventListener('click', function () {
-  isOpen = !isOpen;
-  if (isOpen) navList.classList.remove('hide');
-  else navList.classList.add('hide');
+  isListOpen ? closeList() : openList();
 });
 
 document.addEventListener('click', function (e) {
@@ -201,14 +208,12 @@ document.addEventListener('click', function (e) {
     e.target.closest('nav ul') != navList &&
     e.target.closest('nav .icon') != navIcon
   )
-    navList.classList.add('hide');
+    closeList();
 });
 
 navList.addEventListener('click', function (e) {
-  console.log(e);
-  console.log(e.target.classList.contains('link'));
   if (e.target.classList.contains('link')) {
-    console.log(e.target.dataset.opt);
     fetchAndDisplayRecipes(e.target.dataset.opt);
+    closeList();
   }
 });
